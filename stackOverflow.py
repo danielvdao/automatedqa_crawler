@@ -251,9 +251,7 @@ def run(start_page, end_page):
 	conn 				= psycopg2.connect(database=db_name, user=db_user, password=db_password,
 										   port=db_port, host=db_host)
 	page 		   		= start_page
-	questions_url  		= questions_url.format(key=so_api_key, page=1)
-	page = start_page
-
+	questions_url  		= questions_url.format(key=so_api_key, page=page)
 
 	while page >= start_page and page <= end_page:
 		logger.info( "\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n Moving to page " + str(page))
