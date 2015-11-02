@@ -39,8 +39,8 @@ COUNT = 1
 
 @app.route('/start', methods=['GET', 'POST'])
 def index():
-	start_page = request.form.get('start_page', type=int)
-	end_page   = request.form.get('end_page', type=int)
+	start_page = request.args.get('start_page')
+	end_page   = request.args.get('end_page')
 	run.delay(start_page,end_page)
 	logger.info("Building Corpus...")
 	return "Process iniatied"
@@ -251,9 +251,11 @@ def run(start_page, end_page):
 	conn 				= psycopg2.connect(database=db_name, user=db_user, password=db_password,
 										   port=db_port, host=db_host)
 	page 		   		= start_page
-	questions_url  		= questions_url.format(key=so_api_key, page=page)
+	questions_url  		= questions_url.format(key=so_api_key, page=1)
+	page = start_page
 
-	while page >= start_page and page <= end_page:
+
+	while start_page >= page and page <= end_page:
 		logger.info( "\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n Moving to page " + str(page))
 		questions, requests_remaining = get_questions(url=questions_url, page=page)
 		page 		  	   			  = page + 1
